@@ -1,0 +1,173 @@
+Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }, visible: $root.loginState.isUser() && !$root.isPrinting()" title="Force refresh" ><span class="icon-refresh"></span></a>
+
+<div>
+<a href="#" class="btn btn-primary" data-bind="click: showAddDialog"> {{ _('Add to queue') }}</a>
+</div>
+
+<div class="pull-right">
+    <div>
+        <small>
+            {{ _('Sort by') }}:
+            <a href="#" data-bind="click: typeThenDateSort">{{ _('Type then date') }} </a> |
+            <a href="#" data-bind="click: dateOnlySort">{{ _('Date only') }} </a>
+        </small>
+    </div>
+    <div>
+        <small>
+            {{_('Show: ')}}
+            <a href="#" data-bind="click: function() { listHelper.toggleFilter('queue'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'queue') ? 'visible' : 'hidden'}"></i>queue</a>
+            <a href="#" data-bind="click: function() { listHelper.toggleFilter('archive'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'archive') ? 'visible' : 'hidden'}"></i>archive</a>
+        </small>
+    </div>
+</div>
+
+<table id="print_queue_main_table" class="table table-striped table-hover table-condensed table-hover" style="clear: both;">
+    <thead>
+        <tr>
+            <th style="width: 14%">Date</th>
+            <th style="width: 25%">Customer</th>
+            <th style="width: 28%;">File</th>
+            <th style="width: 18%;">Print type</th>
+            <th style="width: 15%;">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: listHelper.paginatedItems">
+        <tr>
+            <td data-bind="text: timeAgo, attr: { title: submissiontimestamp}"></td>
+            <td>
+                <div data-bind="text: customer, attr: { title: customer }">&nbsp;</div>
+                <div class="additionalInfo">
+                    <div data-bind="visible: contact">Contact: <span data-bind="text: contact"></span></div>
+                    <div data-bind="visible: staff">Staff member: <span data-bind="text: staff"></span></div>
+                </div>
+            </td>
+            <td>
+                <div data-bind="html: filename">&nbsp;</div>
+                <div class="additionalInfo">
+                    <div data-bind="visible: note">Note: <span data-bind="text: note"></span></div>
+                </div>
+            </td>
+            <td>
+                <div data-bind="html: printtypeString">&nbsp;</div>
+                <div class="additionalInfo">
+                    <div data-bind="visible: cost">Cost: <span data-bind="text: cost"></span><span data-bind="visible: prepaidBool"> (prepaid)</span></div>
+                </div>
+            </td>
+            <td>
+                <div class="btn-group action-buttons" data-bind="visible: $root.loginState.isUser()">
+                    <div class="btn btn-mini" data-bind="enable: !$root.isPrinting(), click: function() { $root.print($data.id); }" title="{{ _('Print') }}"><i class="icon-print"></i></div>
+                    <div class="btn btn-mini" data-bind="click: function() { $root.showEditDialog($data); }" title="{{ _('Edit') }}"><i class="fa fa-pencil"></i></div>
+                    <div class="btn btn-mini" data-bind="click: function() { $root.showArchiveDialog($data); },attr:{title:(archivedBool()?'Restore':'Archive')}"><i class="fa fa-archive" data-bind="visible: !archivedBool()"></i><i class="fa fa-undo" data-bind="visible: archivedBool()"></i></div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="pagination pagination-mini pagination-centered">
+    <ul>
+        <li data-bind="css: {disabled: listHelper.currentPage() === 0}">
+            <a href="#" data-bind="click: listHelper.prevPage">«</a>
+        </li>
+    </ul>
+    <ul data-bind="foreach: listHelper.pages">
+        <li data-bind="css: { active: $data.number === $root.listHelper.currentPage(), disabled: $data.number === -1 }">
+            <a href="#" data-bind="text: $data.text, click: $root.listHelper.changePage.bind($data, $data.number)"></a>
+        </li>
+    </ul>
+    <ul>
+        <li data-bind="css: {disabled: listHelper.currentPage() === listHelper.lastPage()}">
+            <a href="#" data-bind="click: listHelper.nextPage">»</a>
+        </li>
+    </ul>
+</div>
+
+
+
+<div id="edit_dialog" class="modal hide fade" data-bind="with: itemForEditing">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+        <h4 data-bind="if: $parent.addingNew">Add to the queue</h4>
+        <h4 data-bind="ifnot: $parent.addingNew">Editing queue entry</h4>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" action="javascript:void(0)">
+            <div class="control-group">
+                <label class="control-label">Staff member:</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: staff">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Customer name:</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: customer">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Customer contact info:</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: contact">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">File name</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: filename">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Notes:</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: note">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Cost</label>
+                <div class="controls">
+                    <input type="text" data-bind="value: cost">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Prepaid?</label>
+                <div class="controls">
+                    <input type="checkbox" data-bind="checked: prepaid">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Submission type:</label>
+                <div class="controls">
+                    <select data-bind="options: printtypes, value: printtype, optionsCaption: 'Select type'"></select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+        <a href="#" class="btn btn-primary" data-bind="if: $parent.addingNew, click: $parent.addToQueue"><i></i>{{ _('Add to queue') }}</a>
+        <a href="#" class="btn btn-primary" data-bind="ifnot: $parent.addingNew, click: $parent.modifyQueueItem"><i></i>{{ _('Save changes') }}</a>
+    </div>
+</div>
+
+<div id="archive_dialog" class="modal hide fade" data-bind="with: itemForArchiving">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+        <h4 data-bind="visible:!archivedBool()">Archive print job?</h4>
+        <h4 data-bind="visible:archivedBool()">Restore print job?</h4>
+    </div>
+    <div class="modal-body"">
+        <p data-bind="visible:!archivedBool">This will mark the print job as complete and remove it from the queue.</p>
+        <p data-bind="visible:archivedBool">This will restore the print request to the queue.</p>
+        <h5>Job details</h5>
+        <ul>
+            <li>Customer: <span data-bind="text: customer"></span></li>
+            <li>File: <span data-bind="text: filename"></span></li>
+            <li>Note: <span data-bind="text: note"></span></li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
+        <a href="#" class="btn btn-primary" data-bind="click: $parent.toggleArchive"><i></i><span data-bind="ifnot: archivedBool()">{{ _('Archive') }}</span><span data-bind="if: archivedBool()">{{ _('Restore') }}</span></a>
+    </div>
+</div>
+
