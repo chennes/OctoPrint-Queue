@@ -40,12 +40,17 @@ $(function() {
             this.prepaidBool = ko.pureComputed(function() {
                 return this.prepaid() == 1;
             }, this);
-            this.printtypeString = ko.pureComputed(function() {
-                return this.printtypes()[this.printtype()];
-            }, this);
             this.filenameString = ko.pureComputed(function() {
                 var c = this.filename().split(":");
                 return c.length > 1? c[1]:c[0];
+            }, this);
+            this.printtypeString = ko.computed({
+                read: function() {
+                    return this.printtypes()[this.printtype()];
+                }, 
+                write: function (value) {
+                    this.printtype (this.printtypes().findIndex(x => x == value));
+                }
             }, this);
             this.timeAgo = ko.pureComputed(function() {
                 var ms = Date.parse(this.submissiontimestamp()+"Z");
@@ -82,6 +87,8 @@ $(function() {
             self.editDialog.on('hidden', self.onCancelEdit);
             self.archiveDialog = $("#archive_dialog");
             self.archiveDialog.on('hidden', self.onCancelArchive);
+            var icon = $(".icon-refresh");
+            icon.addClass("icon-spinner icon-spin");
         }
 
         self.onBeforeBinding = function () {
@@ -120,6 +127,8 @@ $(function() {
                 return;
             }
             self.requestingData = true;
+            var icon = $(".icon-refresh");
+            icon.addClass("icon-spinner icon-spin");
             $.ajax({
                 url: "plugin/queue/queue",
                 type: "GET",
@@ -128,6 +137,7 @@ $(function() {
                 success: self.fromResponse
             }).always(function () {
                 self.requestingData = false;
+                icon.removeClass("icon-spinner icon-spin");
             });
         }
 
@@ -177,7 +187,8 @@ $(function() {
                 note: self.itemForEditing().note(),
                 cost: self.itemForEditing().cost(),
                 prepaid: self.itemForEditing().prepaid(),
-                printtype: self.printtypes().findIndex(x => x == self.itemForEditing().printtype())
+                printtype: self.itemForEditing().printtype(),
+                archived: 0 
             };
 
             $.ajax({
@@ -227,7 +238,8 @@ $(function() {
                 note: self.itemForEditing().note(),
                 cost: self.itemForEditing().cost(),
                 prepaid: self.itemForEditing().prepaid(),
-                printtype: self.printtypes().findIndex(x => x == self.itemForEditing().printtype())
+                archived: self.itemForEditing().archived(),
+                printtype: self.itemForEditing().printtype()
             };
 
             $.ajax({
