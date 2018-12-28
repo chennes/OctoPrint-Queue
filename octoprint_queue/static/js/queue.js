@@ -10,6 +10,7 @@ $(function() {
         self.loginState = parameters[0];
         self.global_settings = parameters[1];
         self.users = parameters[2];
+        self.files = parameters[3];
 
         self.isPrinting = ko.observable(undefined);
         self.itemForEditing = ko.observable();
@@ -33,16 +34,20 @@ $(function() {
 
             this.printtypes = self.global_settings.settings.plugins.queue.printtypes;
 
-            this.archivedBool = ko.computed(function() {
+            this.archivedBool = ko.pureComputed(function() {
                 return this.archived() == 1;
             }, this);
-            this.prepaidBool = ko.computed(function() {
+            this.prepaidBool = ko.pureComputed(function() {
                 return this.prepaid() == 1;
             }, this);
-            this.printtypeString = ko.computed(function() {
+            this.printtypeString = ko.pureComputed(function() {
                 return this.printtypes()[this.printtype()];
             }, this);
-            this.timeAgo = ko.computed(function() {
+            this.filenameString = ko.pureComputed(function() {
+                var c = this.filename().split(":");
+                return c.length > 1? c[1]:c[0];
+            }, this);
+            this.timeAgo = ko.pureComputed(function() {
                 var ms = Date.parse(this.submissiontimestamp()+"Z");
                 var s = ms / 1000.0;
                 return formatTimeAgo(s);
@@ -63,7 +68,7 @@ $(function() {
 
             this.archived (updateData.archived || false);  
             this.prepaid (updateData.prepaid || false);  
-            this.printtype (updateData.printtype || 0);  
+            this.printtype (updateData.printtype);  
             this.submissiontimestamp (updateData.submissiontimestamp || 0);
         }
 
@@ -88,6 +93,11 @@ $(function() {
             self.onQueueTab = current == "#tab_plugin_queue";
         }
 
+        self.onEventFileAdded = function(payload) {
+            self.showAddDialog();
+            self.itemForEditing().filename(payload.storage + ":" + payload.path);
+        }
+
         self.fromCurrentData = function(data) {
             var isPrinting = data.state.flags.printing;
 
@@ -109,7 +119,7 @@ $(function() {
             if (self.requestingData) {
                 return;
             }
-            self.requestionData = true;
+            self.requestingData = true;
             $.ajax({
                 url: "plugin/queue/queue",
                 type: "GET",
@@ -183,6 +193,19 @@ $(function() {
         self.addedToQueue = function(data) {
             self.fromResponse(data);
             self.editDialog.modal("hide");
+        }
+
+        self.loadFile = function(queueItem) {
+            var data = {};
+            var components = queueItem.filename().split(":");
+            if (components.length == 1) { 
+                data.origin = "local";
+                data.path = components[0];
+            } else {
+                data.origin = components[0];
+                data.path = components[1];
+            }
+            self.files.loadFile(data);    
         }
 
         self.showAddDialog = function() {
@@ -313,7 +336,7 @@ $(function() {
      */
     OCTOPRINT_VIEWMODELS.push({
         construct: QueueViewModel,
-        dependencies: [ "loginStateViewModel", "settingsViewModel", "usersViewModel" ],
+        dependencies: [ "loginStateViewModel", "settingsViewModel", "usersViewModel", "filesViewModel" ],
         elements: ["#tab_plugin_queue", "#settings_plugin_queue" ]
     });
 });

@@ -42,7 +42,7 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
                 </div>
             </td>
             <td>
-                <div data-bind="html: filename">&nbsp;</div>
+                <div data-bind="html: filenameString">&nbsp;</div>
                 <div class="additionalInfo">
                     <div data-bind="visible: note">Note: <span data-bind="text: note"></span></div>
                 </div>
@@ -55,7 +55,7 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
             </td>
             <td>
                 <div class="btn-group action-buttons" data-bind="visible: $root.loginState.isUser()">
-                    <div class="btn btn-mini" data-bind="enable: !$root.isPrinting(), click: function() { $root.print($data.id); }" title="{{ _('Print') }}"><i class="icon-print"></i></div>
+                    <div class="btn btn-mini" data-bind="enable: !$root.isPrinting(), click: function() { $root.loadFile($data); }" title="{{ _('Load file') }}"><i class="fa fa-folder-open"></i></div>
                     <div class="btn btn-mini" data-bind="click: function() { $root.showEditDialog($data); }" title="{{ _('Edit') }}"><i class="fa fa-pencil"></i></div>
                     <div class="btn btn-mini" data-bind="click: function() { $root.showArchiveDialog($data); },attr:{title:(archivedBool()?'Restore':'Archive')}"><i class="fa fa-archive" data-bind="visible: !archivedBool()"></i><i class="fa fa-undo" data-bind="visible: archivedBool()"></i></div>
                 </div>
@@ -137,15 +137,15 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
             <div class="control-group">
                 <label class="control-label">Submission type:</label>
                 <div class="controls">
-                    <select data-bind="options: printtypes, value: printtype, optionsCaption: 'Select type'"></select>
+                    <select data-bind="options: printtypes, value: printtypeString, optionsCaption: 'Select type'"></select>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">{{ _('Cancel') }}</a>
-        <a href="#" class="btn btn-primary" data-bind="if: $parent.addingNew, click: $parent.addToQueue"><i></i>{{ _('Add to queue') }}</a>
-        <a href="#" class="btn btn-primary" data-bind="ifnot: $parent.addingNew, click: $parent.modifyQueueItem"><i></i>{{ _('Save changes') }}</a>
+        <span data-bind="if: $parent.addingNew"><a href="#" class="btn btn-primary" data-bind="click: $parent.addToQueue"><i></i>{{ _('Add to queue') }}</a></span>
+        <span data-bind="ifnot: $parent.addingNew"><a href="#" class="btn btn-primary" data-bind="click: $parent.modifyQueueItem"><i></i>{{ _('Save changes') }}</a></span>
     </div>
 </div>
 

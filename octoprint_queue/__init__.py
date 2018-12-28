@@ -21,8 +21,10 @@ class QueuePlugin(octoprint.plugin.StartupPlugin,
 				  octoprint.plugin.BlueprintPlugin,
 				  octoprint.plugin.EventHandlerPlugin):
 
-	def on_after_startup(self):
+	def __init__(self):
 		self._queue_dict = None
+
+	def on_after_startup(self):
 		self._queue_db_path = os.path.join(self.get_plugin_data_folder(),"queue.db")
 		connection = sqlite3.connect(self._queue_db_path)
 		cursor = connection.cursor()
@@ -104,9 +106,8 @@ END;
 
 	##~~ EventPlugin mixin
 
-	#def on_event(self, event, payload):
-	#	from . import eventHandler
-	#	return eventHandler.eventHandler(self, event, payload)
+#	def on_event(self, event, payload):
+
 
 
 	##~~ Blueprint mixin -- basically the whole plugin
@@ -141,6 +142,15 @@ END;
 										  condition=lambda *args, **kwargs: condition(),
 										  unless=lambda: force)(view)()
 
+	@octoprint.plugin.BlueprintPlugin.route("/file", methods=["GET"])
+	def getRecentFile(self):
+		if self._fileAddedPayload is not None:
+			payload = self._fileAddedPayload
+			self._fileAddedPayload = None
+			return jsonify(payload)
+		else:
+			return jsonify({})
+	
 	@octoprint.plugin.BlueprintPlugin.route("/addtoqueue", methods=["PUT"])
 	def addToQueue(self):
 		from werkzeug.exceptions import BadRequest
