@@ -146,7 +146,7 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
             <div class="control-group">
                 <label class="control-label">Submission type:</label>
                 <div class="controls">
-                    <select data-bind="options: printtypes, value: printtypeString, optionsCaption: 'Select type'"></select>
+                    <select data-bind="options: $parent.printtypes, value: printtypeString, optionsCaption: 'Select type'"></select>
                 </div>
             </div>
         </form>

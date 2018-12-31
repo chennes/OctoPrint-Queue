@@ -18,7 +18,9 @@ $(function() {
         self.itemForArchiving = ko.observable();
 
         self.requestingData = ko.observable();
+        self.queueIsEmpty = ko.observable();
 
+        self.printtypes = ko.observableArray();
 
         var QueueItem = function(data) {
             this.id = ko.observable();
@@ -34,8 +36,6 @@ $(function() {
             this.printtype = ko.observable();
             this.submissiontimestamp = ko.observable();
 
-            this.printtypes = self.global_settings.settings.plugins.queue.printtypes;
-
             this.archivedBool = ko.pureComputed(function() {
                 return this.archived() == 1;
             }, this);
@@ -48,10 +48,14 @@ $(function() {
             }, this);
             this.printtypeString = ko.computed({
                 read: function() {
-                    return this.printtypes()[this.printtype()];
+                    if (self.printtypes().length > this.printtype()) {
+                        return self.printtypes()[this.printtype()];
+                    } else {
+                        return "";
+                    }
                 }, 
                 write: function (value) {
-                    this.printtype (this.printtypes().findIndex(x => x == value));
+                    this.printtype (self.printtypes().findIndex(x => x == value));
                 }
             }, this);
             this.timeAgo = ko.pureComputed(function() {
@@ -82,6 +86,7 @@ $(function() {
         self.onQueueTab = false;
         self.dataIsStale = true;
         self.requestingData (false);
+        self.queueIsEmpty (true);
         self.pureData = {};
 
         self.onStartup = function () {
@@ -95,7 +100,7 @@ $(function() {
 
         self.onBeforeBinding = function () {
             self.settings = self.global_settings.settings.plugins.queue;
-            self.printtypes = self.settings.printtypes;
+            self.pullPrintTypesFromStorage();
         }
 
         self.onAfterTabChange = function(current, previous) {
@@ -149,6 +154,12 @@ $(function() {
             });
             self.pureData = data.queue;
             self.dataIsStale = false;
+            self.queueIsEmpty(true);
+            for (var row = 0; row < dataRows.length; row++) {
+                if (dataRows[row]['archived'] == false) {
+                    self.queueIsEmpty(false);
+                }
+            }
             self.listHelper.updateItems(dataRows);
         }
 
@@ -274,24 +285,61 @@ $(function() {
         
         /* ### Settings ### */
 
-        self.addNewPrintType = function(name) {
-            self.printtypes.push(name);
+        self.pullPrintTypesFromStorage = function() {
+            self.printtypes.removeAll();
+            for (var i = 0; i < self.settings.printtypes().length; i++) {
+                self.printtypes.push (self.settings.printtypes()[i]);
+            }
+        }
+
+        self.pushPrintTypesToStorage = function() {
+            var inputPrintTypeElements = $(".printTypeEntry")
+            var inputPrintTypes = [];
+            for (var i = 0; i < inputPrintTypeElements.length; i++) {
+                inputPrintTypes.push(inputPrintTypeElements[i].value);
+            }
+            self.updatePrintTypes (inputPrintTypes);
+        }
+
+        self.addNewPrintType = function() {
+            self.printtypes.push("Untitled");
         };
 
         self.removePrintType = function(printtype) {
-            self.printtypes.remove(printtype);
+            var currentPosition = self.printtypes.indexOf(printtype);
+            self.printtypes.splice(currentPosition,1);
         };
 
         self.movePrintTypeUp = function(printtype) {
-            console.log("TODO: Move print type up.");
+            var currentPosition = self.printtypes.indexOf(printtype);
+            if (currentPosition > 0) {
+                self.printtypes.splice(currentPosition-1,0,self.splice(currentPosition,1)[0]);
+            }
         };
 
         self.movePrintTypeDown = function(printtype) {
-            console.log("TODO: Move print type down.");
+            var currentPosition = self.printtypes.indexOf(printtype);
+            if (currentPosition < self.printtypes().length-1) {
+                self.printtypes.splice(currentPosition+1,0,self.splice(currentPosition,1)[0]);
+            }
         };
 
         self.onSettingsBeforeSave = function () {
-            self.global_settings.settings.plugins.queue.printtypes(self.printtypes);
+            var inputPrintTypeElements = $(".printTypeEntry")
+            var inputPrintTypes = [];
+            for (var i = 0; i < inputPrintTypeElements.length; i++) {
+                inputPrintTypes.push(inputPrintTypeElements[i].value);
+            }
+            self.printtypes.removeAll();
+            self.settings.printtypes().length = 0;
+            for (var i = 0; i < inputPrintTypes.length; i++) {
+                self.printtypes.push (inputPrintTypes[i]);
+                self.settings.printtypes().push (inputPrintTypes[i]);
+            }
+        }
+
+        self.onSettingsHidden = function () {
+            self.pullPrintTypesFromStorage();
         }
 
         /* ItemListHelper is provided by Octoprint in helpers.js */
