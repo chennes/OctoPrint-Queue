@@ -5,6 +5,7 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
 </div>
 
 <div class="pull-right">
+
     <div>
         <small>
             {{ _('Sort by') }}:
@@ -15,15 +16,15 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
     <div>
         <small>
             {{_('Show: ')}}
-            <a href="#" data-bind="click: function() { listHelper.toggleFilter('queue'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'queue') ? 'visible' : 'hidden'}"></i>queue</a>
-            <a href="#" data-bind="click: function() { listHelper.toggleFilter('archive'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'archive') ? 'visible' : 'hidden'}"></i>archive</a>
+            <a href="#" data-bind="click: function() { listHelper.toggleFilter('queue'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'queue') ? 'visible' : 'hidden'}"></i>Queue</a>
+            <a href="#" data-bind="click: function() { listHelper.toggleFilter('archive'); }"><i class="icon-ok" data-bind="style: {visibility: _.contains(listHelper.currentFilters(), 'archive') ? 'visible' : 'hidden'}"></i>Archive</a>
         </small>
     </div>
 </div>
 
 <div data-bind="if:listHelper.items().length == 0">
     <div data-bind="ifnot:requestingData">
-        <span data-bind="if:_.contains(listHelper.currentFilters(), 'queue')">Print queue is empty. Upload a file to add it to the queue.</span>
+        <span data-bind="if:_.contains(listHelper.currentFilters(), 'queue')">The print queue is empty. Upload a file to add it to the queue.</span>
         <span data-bind="if:_.contains(listHelper.currentFilters(), 'archive')">No queue items have been archived yet.</span>
     </div>
     <div data-bind="if:requestingData">Loading...</div>
