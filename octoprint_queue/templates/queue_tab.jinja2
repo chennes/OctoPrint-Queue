@@ -8,8 +8,8 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
     <div>
         <small>
             {{ _('Sort by') }}:
-            <a href="#" data-bind="click: typeThenDateSort">{{ _('Type then date') }} </a> |
-            <a href="#" data-bind="click: dateOnlySort">{{ _('Date only') }} </a>
+            <a href="#" data-bind="click: typeThenDateSort"><i class="icon-ok" data-bind="style: {visibility: listHelper.currentSorting() == 'typeThenDate' ? 'visible' : 'hidden'}"></i>{{ _('Type then date') }} </a>
+            <a href="#" data-bind="click: dateOnlySort"><i class="icon-ok" data-bind="style: {visibility: listHelper.currentSorting() == 'dateOnly' ? 'visible' : 'hidden'}"></i>{{ _('Date only') }} </a>
         </small>
     </div>
     <div>
