@@ -17,6 +17,8 @@ $(function() {
         self.addingNew = ko.observable();
         self.itemForArchiving = ko.observable();
 
+        self.requestingData = ko.observable();
+
 
         var QueueItem = function(data) {
             this.id = ko.observable();
@@ -79,7 +81,7 @@ $(function() {
 
         self.onQueueTab = false;
         self.dataIsStale = true;
-        self.requestingData = false;
+        self.requestingData (false);
         self.pureData = {};
 
         self.onStartup = function () {
@@ -123,10 +125,10 @@ $(function() {
                 self.dataIsStale = true;
                 return;
             }
-            if (self.requestingData) {
+            if (self.requestingData()) {
                 return;
             }
-            self.requestingData = true;
+            self.requestingData(true);
             var icon = $(".icon-refresh");
             icon.addClass("icon-spinner icon-spin");
             $.ajax({
@@ -136,7 +138,7 @@ $(function() {
                 dataType: "json",
                 success: self.fromResponse
             }).always(function () {
-                self.requestingData = false;
+                self.requestingData(false);
                 icon.removeClass("icon-spinner icon-spin");
             });
         }
