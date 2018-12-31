@@ -1,6 +1,8 @@
 # OctoPrint-Queue
 
-**TODO:** Describe what your plugin does.
+This plugin provides a simple print queue with support for priority categories. When you upload a file the system presents a dialog for enteroing the file into your print queue, or you can manually click the "Add" button. The queue sorts by those categories first, and then within each category by submission date. So, for example, if you have categories "Urgent", "Customer", and "Staff", your urgent prints will be at the top of the queue, followed by customer, then staff. The oldest urgent job is at the top, and the newest staff job is at the bottom. When a print has been completed, an "archive" button removes it from the queue (but retains it in the database for record-keeping).
+
+The queue was designed for use by staff at a public library, so it also supports keeping track of customer contact information, job cost, a staff contact person for the job, and a general-purpose notes field.
 
 ## Setup
 
@@ -9,9 +11,13 @@ or manually using this URL:
 
     https://github.com/chennes/OctoPrint-Queue/archive/master.zip
 
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
-
 ## Configuration
 
-**TODO:** Describe your plugin's configuration options (if any).
+The plugin ships with the following priority categories preconfigured:
+ - Urgent
+ - Customer
+ - Student
+ - Internal
+ - Other
+
+This is configurable via the OctoPrint preferences dialog: you can have as many or as few categories as you want, and they can be in whatever order you want. For example, you might just have "Urgent" and "Normal." Note that changing the available categories while there are jobs in the queue may result in some confusion, since the job's category or priority may have changed. 
