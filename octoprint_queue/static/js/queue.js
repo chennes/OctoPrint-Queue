@@ -156,7 +156,7 @@ $(function() {
             self.dataIsStale = false;
             self.queueIsEmpty(true);
             for (var row = 0; row < dataRows.length; row++) {
-                if (dataRows[row]['archived'] == false) {
+                if (dataRows[row].archived() == false) {
                     self.queueIsEmpty(false);
                 }
             }
