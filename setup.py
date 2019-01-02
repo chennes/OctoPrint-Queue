@@ -1,8 +1,6 @@
 # coding=utf-8
 
 ########################################################################################################################
-### Do not forget to adjust the following variables to your own plugin.
-
 # The plugin's identifier, has to be unique
 plugin_identifier = "queue"
 
@@ -11,14 +9,14 @@ plugin_package = "octoprint_queue"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
-plugin_name = "OctoPrint-Queue"
+plugin_name = "Queue"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
 plugin_version = "1.0.0"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """A simple queue setup designed for use by staff at a public library. """
+plugin_description = """A simple print queue. """
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
 plugin_author = "Chris Hennes"
