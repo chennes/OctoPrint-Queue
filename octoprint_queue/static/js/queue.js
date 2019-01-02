@@ -18,8 +18,8 @@ $(function() {
         self.itemForArchiving = ko.observable();
 
         self.startingUp = ko.observable(true);
-        self.requestingData = ko.observable();
-        self.queueIsEmpty = ko.observable();
+        self.requestingData = ko.observable(false);
+        self.queueIsEmpty = ko.observable(true);
 
         self.printtypes = ko.observableArray();
 
@@ -86,8 +86,6 @@ $(function() {
 
         self.onQueueTab = false;
         self.dataIsStale = true;
-        self.requestingData (false);
-        self.queueIsEmpty (true);
         self.pureData = {};
 
         self.onStartup = function () {
@@ -95,11 +93,6 @@ $(function() {
             self.editDialog.on('hidden', self.onCancelEdit);
             self.archiveDialog = $("#archive_dialog");
             self.archiveDialog.on('hidden', self.onCancelArchive);
-            self.requestData({force:true});
-        }
-
-        self.onAfterStartup = function () {
-            self.startingUp(false);
         }
 
         self.onBeforeBinding = function () {
@@ -148,6 +141,7 @@ $(function() {
                 success: self.fromResponse
             }).always(function () {
                 self.requestingData(false);
+                self.startingUp(false); // Don't mark this as false until we've actually gotten a request sent off
                 icon.removeClass("icon-spinner icon-spin");
             });
         }
