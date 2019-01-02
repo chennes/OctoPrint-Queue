@@ -384,7 +384,7 @@ $(function() {
             "typeThenDate", /*defaultSorting*/
             ["queue"], /*defaultFilter*/
             [["queue","archive"]], /*exclusiveFilters*/
-            25 /*defaultPageSize*/ );
+            10 /*defaultPageSize*/ );
 
         self.typeThenDateSort = function() {
             self.listHelper.changeSorting("typeThenDate");
