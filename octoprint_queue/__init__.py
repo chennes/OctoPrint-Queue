@@ -5,10 +5,10 @@ from __future__ import absolute_import
 
 __author__ = "Chris Hennes <chennes@pioneerlibrarysystem.org"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
-__copyright__ = "Copyright (C) 2018 Pioneer Library System. Released under the terms of the AGPLv3 license."
+__copyright__ = "Copyright (C) 2019 Pioneer Library System. Released under the terms of the AGPLv3 license."
 
 from flask import jsonify, request, make_response
-from octoprint.server.util.flask import with_revalidation_checking, check_etag
+from octoprint.server.util.flask import with_revalidation_checking, check_etag, restricted_access
 
 import octoprint.plugin
 import sqlite3
@@ -112,6 +112,7 @@ END;
 
 	##~~ Blueprint mixin -- basically the whole plugin
 	@octoprint.plugin.BlueprintPlugin.route("/queue", methods=["GET"])
+	@restricted_access
 	def getQueue(self):
 		from octoprint.settings import valid_boolean_trues
 		force = request.values.get("force","false") in valid_boolean_trues
@@ -143,6 +144,7 @@ END;
 										  unless=lambda: force)(view)()
 
 	@octoprint.plugin.BlueprintPlugin.route("/file", methods=["GET"])
+	@restricted_access
 	def getRecentFile(self):
 		if self._fileAddedPayload is not None:
 			payload = self._fileAddedPayload
@@ -152,6 +154,7 @@ END;
 			return jsonify({})
 	
 	@octoprint.plugin.BlueprintPlugin.route("/addtoqueue", methods=["PUT"])
+	@restricted_access
 	def addToQueue(self):
 		from werkzeug.exceptions import BadRequest
 		try:
@@ -180,6 +183,7 @@ END;
 		return self.getQueue()
 
 	@octoprint.plugin.BlueprintPlugin.route("/archive", methods=["PUT"])
+	@restricted_access
 	def archive(self):
 		from werkzeug.exceptions import BadRequest
 		try:
@@ -199,6 +203,7 @@ END;
 		return self.getQueue()
 
 	@octoprint.plugin.BlueprintPlugin.route("/modifyitem", methods=["PUT"])
+	@restricted_access
 	def modifyItem(self):
 		from werkzeug.exceptions import BadRequest
 		try:
