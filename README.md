@@ -22,4 +22,10 @@ The plugin ships with the following priority categories preconfigured:
 
 This is configurable via the OctoPrint preferences dialog: you can have as many or as few categories as you want, and they can be in whatever order you want. For example, you might just have "Urgent" and "Normal." Note that changing the available categories while there are jobs in the queue may result in some confusion, since the job's category or priority may have changed. 
 
-Copyright 2019 [Pioneer Library System](http://pioneerlibrarysystem.org). Released under the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.en.html). Some rights reserved.
+## License
+
+Copyright © 2019 [Pioneer Library System](http://pioneerlibrarysystem.org).
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.en.html) for more details.
