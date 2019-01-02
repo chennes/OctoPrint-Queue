@@ -21,3 +21,5 @@ The plugin ships with the following priority categories preconfigured:
  - Other
 
 This is configurable via the OctoPrint preferences dialog: you can have as many or as few categories as you want, and they can be in whatever order you want. For example, you might just have "Urgent" and "Normal." Note that changing the available categories while there are jobs in the queue may result in some confusion, since the job's category or priority may have changed. 
+
+Copyright 2019 Pioneer Library System. Released under the GNU Affero General Public License. Some rights reserved, see LICENSE for details.
