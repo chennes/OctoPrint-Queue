@@ -93,6 +93,7 @@ $(function() {
             self.editDialog.on('hidden', self.onCancelEdit);
             self.archiveDialog = $("#archive_dialog");
             self.archiveDialog.on('hidden', self.onCancelArchive);
+            self.requestData();
         }
 
         self.onBeforeBinding = function () {
@@ -102,6 +103,7 @@ $(function() {
 
         self.onAfterTabChange = function(current, previous) {
             self.onQueueTab = current == "#tab_plugin_queue";
+            self.requestData();
         }
 
         self.onEventFileAdded = function(payload) {
@@ -110,12 +112,7 @@ $(function() {
         }
 
         self.fromCurrentData = function(data) {
-            var isPrinting = data.state.flags.printing;
-
-            if (isPrinting != self.isPrinting()) {
-                self.requestData();
-            }
-            self.isPrinting(isPrinting);
+            self.isPrinting (data.state.flags.printing);
         }
 
         self.requestData = function(params) {
@@ -129,6 +126,7 @@ $(function() {
             var icon = $(".icon-refresh");
             icon.addClass("icon-spinner icon-spin");
             if (!self.onQueueTab) {
+
                 self.dataIsStale = true;
                 return;
             }
@@ -138,10 +136,11 @@ $(function() {
                 type: "GET",
                 data: {force: force},
                 dataType: "json",
-                success: self.fromResponse
+                success: self.fromResponse,
+                error: self.noResponse
             }).always(function () {
                 self.requestingData(false);
-                self.startingUp(false); // Don't mark this as false until we've actually gotten a request sent off
+                self.startingUp(false); // Don't mark this as false until we've actually requested data at least once 
                 icon.removeClass("icon-spinner icon-spin");
             });
         }
@@ -159,6 +158,9 @@ $(function() {
                 }
             }
             self.listHelper.updateItems(dataRows);
+        }
+
+        self.noResponse = function(data) {
         }
 
         self.showArchiveDialog = function(data) {

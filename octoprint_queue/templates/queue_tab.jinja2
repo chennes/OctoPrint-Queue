@@ -1,8 +1,10 @@
-Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }, visible: $root.loginState.isUser() && !$root.isPrinting()" title="Force refresh" ><span class="icon-refresh"></span></a>
-
-<div>
-<a href="#" class="btn btn-primary" data-bind="click: showAddDialog" style="margin-bottom:10px;margin-top:10px;"> {{ _('Add to queue') }}</a>
+<div data-bind="ifnot:$root.loginState.isUser()">
+The print queue is for logged-in users only.
 </div>
+<div data-bind="if:$root.loginState.isUser()">
+
+<p>Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }" title="Force refresh" ><span class="icon-refresh"></span></a></p>
+<p><a href="#" class="btn btn-primary" data-bind="click: showAddDialog" style="margin-bottom:10px;margin-top:10px;"> {{ _('Add to queue') }}</a></p>
 
 <div class="pull-right">
 
@@ -180,3 +182,4 @@ Refresh <a href="#" data-bind="click: function() { requestData({force: true}); }
     </div>
 </div>
 
+</div>
