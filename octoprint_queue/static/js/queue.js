@@ -17,6 +17,7 @@ $(function() {
         self.addingNew = ko.observable();
         self.itemForArchiving = ko.observable();
 
+        self.startingUp = ko.observable(true);
         self.requestingData = ko.observable();
         self.queueIsEmpty = ko.observable();
 
@@ -94,8 +95,11 @@ $(function() {
             self.editDialog.on('hidden', self.onCancelEdit);
             self.archiveDialog = $("#archive_dialog");
             self.archiveDialog.on('hidden', self.onCancelArchive);
-            var icon = $(".icon-refresh");
-            icon.addClass("icon-spinner icon-spin");
+            self.requestData({force:true});
+        }
+
+        self.onAfterStartup = function () {
+            self.startingUp(false);
         }
 
         self.onBeforeBinding = function () {
@@ -126,16 +130,16 @@ $(function() {
             if (_.isObject(params)) {
                 force = params.force;
             }
+            if (self.requestingData()) {
+                return;
+            }
+            var icon = $(".icon-refresh");
+            icon.addClass("icon-spinner icon-spin");
             if (!self.onQueueTab) {
                 self.dataIsStale = true;
                 return;
             }
-            if (self.requestingData()) {
-                return;
-            }
             self.requestingData(true);
-            var icon = $(".icon-refresh");
-            icon.addClass("icon-spinner icon-spin");
             $.ajax({
                 url: "plugin/queue/queue",
                 type: "GET",
