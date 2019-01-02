@@ -217,6 +217,10 @@ $(function() {
         self.addedToQueue = function(data) {
             self.fromResponse(data);
             self.editDialog.modal("hide");
+            self.listHelper.toggleFilter ('queue');
+            if (!self.onQueueTab) {
+                window.location.hash = "tab_plugin_queue";
+            }
         }
 
         self.loadFile = function(queueItem) {
