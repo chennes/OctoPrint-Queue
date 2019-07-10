@@ -60,7 +60,10 @@ $(function() {
                 }
             }, this);
             this.timeAgo = ko.pureComputed(function() {
-                var ms = Date.parse(this.submissiontimestamp()+"Z");
+                var timeString = this.submissiontimestamp();
+                timeString = timeString.replace (" ","T"); // Safari requires the "T" before the time at the moment
+                timeString = timeString + "Z";
+                var ms = Date.parse(timeString);
                 var s = ms / 1000.0;
                 return formatTimeAgo(s);
             }, this);
