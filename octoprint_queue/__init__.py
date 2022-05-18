@@ -135,7 +135,7 @@ END;
 			connection.close()
 			import hashlib
 			hash = hashlib.sha1()
-			hash.update(str(last_modified))
+			hash.update(str(last_modified).encode("UTF-8"))
 			return hash.hexdigest()
 		def condition():
 			return check_etag(etag())
