@@ -6,7 +6,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 __author__ = "Chris Hennes <chennes@pioneerlibrarysystem.org"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
 __copyright__ = "Copyright (C) 2019 Pioneer Library System. Released under the terms of the AGPLv3 license."
-__plugin_pythoncompat__ = ">=2.7,<4"
+__plugin_pythoncompat__ = ">=3.0,<4"
 
 from flask import jsonify, request, make_response
 from octoprint.server.util.flask import with_revalidation_checking, check_etag, restricted_access
