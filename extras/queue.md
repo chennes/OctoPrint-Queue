@@ -4,35 +4,37 @@ layout: plugin
 id: queue
 title: OctoPrint-Queue
 description: A simple queue setup designed for use by staff at a public library. 
-author: Chris Hennes, Pioneer Library System
+authors: 
+- Chris Hennes, Pioneer Library System
 license: AGPLv3 
 
-# TODO
-date: 2018-12-31
+date: 2022-06-06
 
 homepage: https://github.com/chennes/OctoPrint-Queue
 source: https://github.com/chennes/OctoPrint-Queue
 archive: https://github.com/chennes/OctoPrint-Queue/archive/master.zip
 
-# TODO
 tags:
 - ui 
 - queue 
 
-# TODO
 screenshots:
-- url: /assets/img/plugins/queue/MainInterfaceScreenshot.png
+- url: /assets/img/plugins/queue/interface.png
   alt: Screenshot of the main user interface of the plugin.
   caption: The queue with a few items in it.
-- url: /assets/img/plugins/queue/AddToQueueScreenshot.png
+- url: /assets/img/plugins/queue/add.png
   alt: Screenshot of the Add to Queue screen.
   caption: The Add to Queue screen appears when you upload a file, or when you click the "Add" button.
-- url: /assets/img/plugins/queue/SettingsScreenshot.png
+- url: /assets/img/plugins/queue/settings.png
   alt: The settings screen.
   caption: The settings screen showing the default priorities.
 
-# TODO
-featuredimage: /assets/img/plugins/queue/MainInterfaceScreenshot.png
+featuredimage: /assets/img/plugins/queue/queue.png
+
+compatibility:
+  octoprint:
+  - 1.3.0
+  python: ">=3.0,<4"
 
 ---
 
@@ -46,7 +48,7 @@ to provide information to customers.
 
 # Purely local
 
-This plugin does not use any outside services and has no requirments beyond having an OctoPrint installation.
+This plugin does not use any outside services and has no requirements beyond having an OctoPrint installation.
 It does not enforce any restrictions on the input fields, giving staff complete flexibility in how the tool
 gets used.
 
