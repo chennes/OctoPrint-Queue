@@ -19,8 +19,7 @@ class QueuePlugin(octoprint.plugin.StartupPlugin,
 				  octoprint.plugin.SettingsPlugin,
 				  octoprint.plugin.AssetPlugin,
 				  octoprint.plugin.TemplatePlugin,
-				  octoprint.plugin.BlueprintPlugin,
-				  octoprint.plugin.EventHandlerPlugin):
+				  octoprint.plugin.BlueprintPlugin):
 
 	def __init__(self):
 		self._queue_dict = None
@@ -105,12 +104,7 @@ END;
 			)
 		)
 
-	##~~ EventPlugin mixin
-
-#	def on_event(self, event, payload):
-
-
-
+	
 	##~~ Blueprint mixin -- basically the whole plugin
 	@octoprint.plugin.BlueprintPlugin.route("/queue", methods=["GET"])
 	@restricted_access
