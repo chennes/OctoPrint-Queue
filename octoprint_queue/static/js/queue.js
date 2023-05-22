@@ -320,14 +320,14 @@ $(function() {
         self.movePrintTypeUp = function(printtype) {
             var currentPosition = self.printtypes.indexOf(printtype);
             if (currentPosition > 0) {
-                self.printtypes.splice(currentPosition-1,0,self.splice(currentPosition,1)[0]);
+                self.printtypes.splice(currentPosition-1,0,self.printtypes.splice(currentPosition,1)[0]);
             }
         };
 
         self.movePrintTypeDown = function(printtype) {
             var currentPosition = self.printtypes.indexOf(printtype);
             if (currentPosition < self.printtypes().length-1) {
-                self.printtypes.splice(currentPosition+1,0,self.splice(currentPosition,1)[0]);
+                self.printtypes.splice(currentPosition+1,0,self.printtypes.splice(currentPosition,1)[0]);
             }
         };
 
